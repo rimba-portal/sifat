@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace Rimba\Attributing\Http\UI\Admin\Resources\LocationAttributes;
 
 use BackedEnum;
+use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Table;
 use Rimba\Attributing\Http\UI\Admin\Resources\LocationAttributes\Pages\CreateLocationAttribute;
 use Rimba\Attributing\Http\UI\Admin\Resources\LocationAttributes\Pages\EditLocationAttribute;
 use Rimba\Attributing\Http\UI\Admin\Resources\LocationAttributes\Pages\ListLocationAttributes;
@@ -13,10 +17,6 @@ use Rimba\Attributing\Http\UI\Admin\Resources\LocationAttributes\Schemas\Locatio
 use Rimba\Attributing\Http\UI\Admin\Resources\LocationAttributes\Schemas\LocationAttributeInfolist;
 use Rimba\Attributing\Http\UI\Admin\Resources\LocationAttributes\Tables\LocationAttributesTable;
 use Rimba\Attributing\Models\LocationAttribute;
-use Filament\Resources\Resource;
-use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Table;
 use UnitEnum;
 
 class LocationAttributeResource extends Resource

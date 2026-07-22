@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Rimba\Attributing\Http\UI\Admin\Resources\LocationAttributes\Pages;
 
-use Rimba\Attributing\Http\UI\Admin\Resources\LocationAttributes\LocationAttributeResource;
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use Rimba\Attributing\Http\UI\Admin\Resources\LocationAttributes\LocationAttributeResource;
 
 class ListLocationAttributes extends ListRecords
 {

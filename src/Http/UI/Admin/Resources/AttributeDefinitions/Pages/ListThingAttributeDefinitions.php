@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions\Pages;
 
-use Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions\AttributeDefinitionResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Schemas\Components\Tabs\Tab;
 use Illuminate\Database\Eloquent\Builder;
+use Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions\AttributeDefinitionResource;
 
 class ListThingAttributeDefinitions extends ListRecords
 {

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rimba\Attributing\Traits;
 
-use Rimba\Attributing\Models\LocationAttribute;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Rimba\Attributing\Models\LocationAttribute;
 
 trait HasLocationAttributes
 {

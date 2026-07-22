@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace Rimba\Attributing\Http\UI\Admin\Resources\PersonAttributes;
 
 use BackedEnum;
+use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Table;
 use Rimba\Attributing\Http\UI\Admin\Resources\PersonAttributes\Pages\CreatePersonAttribute;
 use Rimba\Attributing\Http\UI\Admin\Resources\PersonAttributes\Pages\EditPersonAttribute;
 use Rimba\Attributing\Http\UI\Admin\Resources\PersonAttributes\Pages\ListPersonAttributes;
 use Rimba\Attributing\Http\UI\Admin\Resources\PersonAttributes\Schemas\PersonAttributeForm;
 use Rimba\Attributing\Http\UI\Admin\Resources\PersonAttributes\Tables\PersonAttributesTable;
 use Rimba\Attributing\Models\PersonAttribute;
-use Filament\Resources\Resource;
-use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Table;
 use UnitEnum;
 
 class PersonAttributeResource extends Resource

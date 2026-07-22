@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions\Tables;
 
-use Rimba\Attributing\Models\AttributeDefinition;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -12,6 +11,7 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
+use Rimba\Attributing\Models\AttributeDefinition;
 
 class AttributeDefinitionsTable
 {

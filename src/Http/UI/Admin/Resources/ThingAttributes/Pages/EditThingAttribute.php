@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Rimba\Attributing\Http\UI\Admin\Resources\ThingAttributes\Pages;
 
-use Rimba\Attributing\Http\UI\Admin\Resources\ThingAttributes\ThingAttributeResource;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
+use Rimba\Attributing\Http\UI\Admin\Resources\ThingAttributes\ThingAttributeResource;
 
 class EditThingAttribute extends EditRecord
 {

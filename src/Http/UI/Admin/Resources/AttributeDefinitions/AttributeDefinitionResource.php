@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions;
 
 use BackedEnum;
-use Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions\Schemas\AttributeDefinitionForm;
-use Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions\Tables\AttributeDefinitionsTable;
-use Rimba\Attributing\Models\AttributeDefinition;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions\Schemas\AttributeDefinitionForm;
+use Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions\Tables\AttributeDefinitionsTable;
+use Rimba\Attributing\Models\AttributeDefinition;
 use UnitEnum;
 
 class AttributeDefinitionResource extends Resource

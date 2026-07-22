@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Rimba\Attributing\Http\UI\Admin\Resources\PersonAttributes\Pages;
 
-use Rimba\Attributing\Http\UI\Admin\Resources\PersonAttributes\PersonAttributeResource;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
+use Rimba\Attributing\Http\UI\Admin\Resources\PersonAttributes\PersonAttributeResource;
 
 class EditPersonAttribute extends EditRecord
 {

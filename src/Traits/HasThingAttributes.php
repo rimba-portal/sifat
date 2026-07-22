@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rimba\Attributing\Traits;
 
-use Rimba\Attributing\Models\ThingAttribute;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Rimba\Attributing\Models\ThingAttribute;
 
 trait HasThingAttributes
 {

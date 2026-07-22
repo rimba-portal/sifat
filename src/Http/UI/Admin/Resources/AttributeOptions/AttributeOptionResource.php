@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace Rimba\Attributing\Http\UI\Admin\Resources\AttributeOptions;
 
 use BackedEnum;
+use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Table;
 use Rimba\Attributing\Http\UI\Admin\Resources\AttributeOptions\Pages\CreateAttributeOption;
 use Rimba\Attributing\Http\UI\Admin\Resources\AttributeOptions\Pages\EditAttributeOption;
 use Rimba\Attributing\Http\UI\Admin\Resources\AttributeOptions\Pages\ListAttributeOptions;
 use Rimba\Attributing\Http\UI\Admin\Resources\AttributeOptions\Schemas\AttributeOptionForm;
 use Rimba\Attributing\Http\UI\Admin\Resources\AttributeOptions\Tables\AttributeOptionsTable;
 use Rimba\Attributing\Models\AttributeOption;
-use Filament\Resources\Resource;
-use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Table;
 use UnitEnum;
 
 class AttributeOptionResource extends Resource

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Rimba\Attributing\Http\UI\Admin\Resources\AttributeOptions\Pages;
 
-use Rimba\Attributing\Http\UI\Admin\Resources\AttributeOptions\AttributeOptionResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use Rimba\Attributing\Http\UI\Admin\Resources\AttributeOptions\AttributeOptionResource;
 
 class ListAttributeOptions extends ListRecords
 {

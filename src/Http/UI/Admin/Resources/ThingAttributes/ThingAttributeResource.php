@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace Rimba\Attributing\Http\UI\Admin\Resources\ThingAttributes;
 
 use BackedEnum;
+use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Table;
 use Rimba\Attributing\Http\UI\Admin\Resources\ThingAttributes\Pages\CreateThingAttribute;
 use Rimba\Attributing\Http\UI\Admin\Resources\ThingAttributes\Pages\EditThingAttribute;
 use Rimba\Attributing\Http\UI\Admin\Resources\ThingAttributes\Pages\ListThingAttributes;
 use Rimba\Attributing\Http\UI\Admin\Resources\ThingAttributes\Schemas\ThingAttributeForm;
 use Rimba\Attributing\Http\UI\Admin\Resources\ThingAttributes\Tables\ThingAttributesTable;
 use Rimba\Attributing\Models\ThingAttribute;
-use Filament\Resources\Resource;
-use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Table;
 use UnitEnum;
 
 class ThingAttributeResource extends Resource

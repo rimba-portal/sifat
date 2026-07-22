@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Rimba\Attributing\Http\UI\Admin\Resources\ThingAttributes\Pages;
 
-use Rimba\Attributing\Http\UI\Admin\Resources\ThingAttributes\ThingAttributeResource;
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use Rimba\Attributing\Http\UI\Admin\Resources\ThingAttributes\ThingAttributeResource;
 
 class ListThingAttributes extends ListRecords
 {
