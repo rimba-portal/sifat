@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rimba\Attributing;
 
 use Rimba\Attributing\Macros\LockWhenFilledMacro;
-use Rimba\Base\BitesServiceProvider;
+use Rimba\Base\Services\BitesServiceProvider;
 
 class AttributingServiceProvider extends BitesServiceProvider
 {
