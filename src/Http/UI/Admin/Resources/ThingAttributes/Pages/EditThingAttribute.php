@@ -20,7 +20,7 @@ class EditThingAttribute extends EditRecord
             Action::make('definition')
                 ->tooltip('Definitions for Thing Attributes')
                 ->iconButton()
-                ->icon('rimba-design')
+                ->icon('bites-design')
                 ->action(fn () => redirect()->route('filament.admin.resources.attribute-definitions.thing')),
         ];
     }

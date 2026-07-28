@@ -24,7 +24,7 @@ class ListPersonAttributes extends ListRecords
             Action::make('definition')
                 ->tooltip('Definitions for Person Attributes')
                 ->iconButton()
-                ->icon('rimba-design')
+                ->icon('bites-design')
                 ->action(fn () => redirect()->route('filament.admin.resources.attribute-definitions.person')),
         ];
     }
