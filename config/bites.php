@@ -3,22 +3,13 @@
 declare(strict_types=1);
 
 return [
-    'ui' => [
-        'packages' => [
-            'bit-es/attributing/src' => 'Rimba\Attributing',
-        ],
-    ],
-
     'navigation_group' => 'Settings',
-
     'navigation_sort' => 90,
-
     'families' => [
         'person' => 'Person',
         'thing' => 'Things',
         'location' => 'Locations',
     ],
-
     'groups' => [
         'person' => [
             'identity' => 'Identity',
@@ -29,7 +20,6 @@ return [
             'requirements' => 'Requirements',
             'health' => 'Health',
         ],
-
         'thing' => [
             'identification' => 'Identification',
             'classification' => 'Classification',
@@ -38,7 +28,6 @@ return [
             'maintenance' => 'Maintenance',
             'document' => 'Document',
         ],
-
         'location' => [
             'geography' => 'Geography',
             'enterprise' => 'Enterprise',
