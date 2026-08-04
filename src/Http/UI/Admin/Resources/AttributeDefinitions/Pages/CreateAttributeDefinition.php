@@ -10,4 +10,7 @@ use Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions\AttributeDefi
 class CreateAttributeDefinition extends CreateRecord
 {
     protected static string $resource = AttributeDefinitionResource::class;
+
+    // Custom
+
 }

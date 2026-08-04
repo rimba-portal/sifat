@@ -10,4 +10,7 @@ use Rimba\Attributing\Http\UI\Admin\Resources\PersonAttributes\PersonAttributeRe
 class CreatePersonAttribute extends CreateRecord
 {
     protected static string $resource = PersonAttributeResource::class;
+
+    // Custom
+
 }

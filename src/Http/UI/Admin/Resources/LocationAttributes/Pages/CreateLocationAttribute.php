@@ -10,4 +10,7 @@ use Rimba\Attributing\Http\UI\Admin\Resources\LocationAttributes\LocationAttribu
 class CreateLocationAttribute extends CreateRecord
 {
     protected static string $resource = LocationAttributeResource::class;
+
+    // Custom
+
 }

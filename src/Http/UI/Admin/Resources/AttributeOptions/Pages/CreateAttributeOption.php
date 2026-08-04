@@ -10,4 +10,7 @@ use Rimba\Attributing\Http\UI\Admin\Resources\AttributeOptions\AttributeOptionRe
 class CreateAttributeOption extends CreateRecord
 {
     protected static string $resource = AttributeOptionResource::class;
+
+    // Custom
+
 }

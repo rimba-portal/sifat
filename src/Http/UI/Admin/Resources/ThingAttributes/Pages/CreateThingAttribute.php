@@ -10,4 +10,7 @@ use Rimba\Attributing\Http\UI\Admin\Resources\ThingAttributes\ThingAttributeReso
 class CreateThingAttribute extends CreateRecord
 {
     protected static string $resource = ThingAttributeResource::class;
+
+    // Custom
+
 }
