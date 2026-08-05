@@ -9,11 +9,6 @@ use Rimba\Attributing\Models\PersonAttribute;
 
 trait HasPersonAttributes
 {
-    /**
-     * @property Collection $personAttributes
-     *
-     * @method \Illuminate\Database\Eloquent\Relations\MorphMany personAttributes()
-     */
     public function personAttributes(): MorphMany
     {
         return $this->morphMany(PersonAttribute::class, 'attributable');
@@ -22,27 +17,43 @@ trait HasPersonAttributes
     public static function seedMappings(): array
     {
         return [
-            'attributes' => [
-                'type' => 'person_attributes',
-                'relation' => 'personAttributes',
-                'key_column' => 'key',
-                'value_column' => 'value',
-                'mode' => 'updateOrCreate',
-            ],
+            'attributes' => 'syncPersonAttributes',
+            'extra' => 'syncPersonAttributes',
         ];
     }
 
     public function syncPersonAttributes(array $attributes): void
     {
         foreach ($attributes as $key => $value) {
-            if ($value === null) {
+            if ($value === null || $value === '') {
                 continue;
             }
 
             $this->personAttributes()->updateOrCreate(
-                ['key' => (string) $key],
-                ['value' => is_scalar($value) ? (string) $value : json_encode($value)],
+                [
+                    'key' => (string) $key,
+                ],
+                [
+                    'value' => $this->normalizePersonAttributeValue($value),
+                ],
             );
         }
+    }
+
+    protected function normalizePersonAttributeValue(mixed $value): ?string
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        if (is_bool($value)) {
+            return $value ? '1' : '0';
+        }
+
+        if (is_scalar($value)) {
+            return (string) $value;
+        }
+
+        return json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     }
 }
