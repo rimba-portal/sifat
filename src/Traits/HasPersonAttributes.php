@@ -18,4 +18,31 @@ trait HasPersonAttributes
     {
         return $this->morphMany(PersonAttribute::class, 'attributable');
     }
+
+    public static function seedMappings(): array
+    {
+        return [
+            'attributes' => [
+                'type' => 'person_attributes',
+                'relation' => 'personAttributes',
+                'key_column' => 'key',
+                'value_column' => 'value',
+                'mode' => 'updateOrCreate',
+            ],
+        ];
+    }
+
+    public function syncPersonAttributes(array $attributes): void
+    {
+        foreach ($attributes as $key => $value) {
+            if ($value === null) {
+                continue;
+            }
+
+            $this->personAttributes()->updateOrCreate(
+                ['key' => (string) $key],
+                ['value' => is_scalar($value) ? (string) $value : json_encode($value)],
+            );
+        }
+    }
 }
