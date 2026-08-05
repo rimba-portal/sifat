@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Rimba\Attributing;
 
-use Rimba\Base\Services\BitesServiceProvider;
 use Rimba\Attributing\Macros\LockWhenFilledMacro;
-
+use Rimba\Base\Services\BitesServiceProvider;
 
 class AttributingServiceProvider extends BitesServiceProvider
 {
-    protected string $configFile = __DIR__ . '/../config/bites.php';
-    protected string $iconsPath = __DIR__ . '/../resources/svg';
+    protected string $configFile = __DIR__.'/../config/bites.php';
+
+    protected string $iconsPath = __DIR__.'/../resources/svg';
 
     protected function bootPackage(): void
     {
@@ -19,9 +19,9 @@ class AttributingServiceProvider extends BitesServiceProvider
         LockWhenFilledMacro::register();
 
     }
+
     protected function registerPackage(): void
     {
         //
     }
-
 }
