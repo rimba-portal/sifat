@@ -54,6 +54,7 @@ return new class extends Migration
             $table->morphs('attributable'); // adds attributable_id and attributable_type
             $table->timestamps();
 
+            $table->unique(['attributable_type', 'attributable_id', 'key']);
             $table->index('key');
         });
         // for consumption of assets, equipment, (actual,defined)
