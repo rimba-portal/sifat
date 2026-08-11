@@ -26,7 +26,7 @@ class PersonAttribute extends Model
     protected function casts(): array
     {
         return [
-            'value' => 'encrypted',
+            // 'value' => 'encrypted',
         ];
     }
 }

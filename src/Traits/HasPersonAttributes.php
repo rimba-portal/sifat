@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rimba\Attributing\Traits;
 
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Rimba\Attributing\Models\AttributeDefinition;
 use Rimba\Attributing\Models\PersonAttribute;
 
 trait HasPersonAttributes
@@ -23,19 +24,47 @@ trait HasPersonAttributes
 
     public function syncPersonAttributes(array $attributes): void
     {
+        $definitions = AttributeDefinition::query()
+            ->where('family', 'person')
+            ->get()
+            ->keyBy('key');
+
+        $extras = [];
+
         foreach ($attributes as $key => $value) {
+
             if ($value === null || $value === '') {
+                continue;
+            }
+
+            $value = $this->normalizePersonAttributeValue($value);
+
+            $definition = $definitions[$key] ?? null;
+
+            if (! $definition) {
+                $extras[$key] = $value;
+
                 continue;
             }
 
             $this->personAttributes()->updateOrCreate(
                 [
-                    'key' => (string) $key,
+                    'key' => $key,
                 ],
                 [
-                    'value' => $this->normalizePersonAttributeValue($value),
+                    'value' => $value,
                 ],
             );
+        }
+
+        if ($extras !== []) {
+
+            $this->attributes = array_merge(
+                $this->attributes ?? [],
+                $extras
+            );
+
+            $this->save();
         }
     }
 
@@ -53,6 +82,9 @@ trait HasPersonAttributes
             return (string) $value;
         }
 
-        return json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        return json_encode(
+            $value,
+            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+        );
     }
 }
