@@ -17,7 +17,7 @@ trait HasPersonAttributes
     public static function seedMappings(): array
     {
         return [
-            'abac' => 'syncPersonAttributes',
+            'attributes' => 'syncPersonAttributes',
         ];
     }
 
