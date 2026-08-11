@@ -21,13 +21,13 @@ class AttributeOptionResource extends Resource
 {
     protected static ?string $model = AttributeOption::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::ArrowSmallRight;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Attributes';
+    protected static string|UnitEnum|null $navigationGroup = 'Attributing';
 
     protected static ?string $navigationLabel = 'Options';
 
-    protected static ?int $navigationSort = 42;
+    protected static ?int $navigationSort = 5;
 
     protected static ?string $title = 'Options';
 

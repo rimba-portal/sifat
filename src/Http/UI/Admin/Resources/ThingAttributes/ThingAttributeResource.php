@@ -21,15 +21,15 @@ class ThingAttributeResource extends Resource
 {
     protected static ?string $model = ThingAttribute::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::ArrowSmallRight;
 
     protected static ?string $recordTitleAttribute = 'key';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Attributes';
+    protected static string|UnitEnum|null $navigationGroup = 'Attributing';
 
     protected static ?string $navigationLabel = 'Thing Attributes';
 
-    protected static ?int $navigationSort = 44;
+    protected static ?int $navigationSort = 8;
 
     public static function form(Schema $schema): Schema
     {

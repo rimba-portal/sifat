@@ -23,15 +23,15 @@ class LocationAttributeResource extends Resource
 {
     protected static ?string $model = LocationAttribute::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::ArrowSmallRight;
 
     protected static ?string $recordTitleAttribute = 'key';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Attributes';
+    protected static string|UnitEnum|null $navigationGroup = 'Attributing';
 
     protected static ?string $navigationLabel = 'Location Attributes';
 
-    protected static ?int $navigationSort = 45;
+    protected static ?int $navigationSort = 6;
 
     public static function form(Schema $schema): Schema
     {
