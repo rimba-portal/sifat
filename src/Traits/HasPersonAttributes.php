@@ -7,6 +7,7 @@ namespace Rimba\Attributing\Traits;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Rimba\Attributing\Models\AttributeDefinition;
 use Rimba\Attributing\Models\PersonAttribute;
+use Spatie\Permission\Models\Role;
 
 trait HasPersonAttributes
 {
@@ -28,19 +29,14 @@ trait HasPersonAttributes
             ->where('family', 'person')
             ->get()
             ->keyBy('key');
-
         $extras = [];
-
         foreach ($attributes as $key => $value) {
-
             if ($value === null || $value === '') {
                 continue;
             }
 
             $value = $this->normalizePersonAttributeValue($value);
-
             $definition = $definitions[$key] ?? null;
-
             if (! $definition) {
                 $extras[$key] = $value;
 
@@ -48,22 +44,19 @@ trait HasPersonAttributes
             }
 
             $this->personAttributes()->updateOrCreate(
-                [
-                    'key' => $key,
-                ],
-                [
-                    'value' => $value,
-                ],
+                ['key' => $key],
+                ['value' => $value],
             );
+            if ($definition->is_abac) {
+                Role::findOrCreate(sprintf('%s.%s', $key, $value));
+            }
         }
 
         if ($extras !== []) {
-
             $this->attributes = array_merge(
                 $this->attributes ?? [],
                 $extras
             );
-
             $this->save();
         }
     }
