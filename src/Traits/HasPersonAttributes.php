@@ -30,6 +30,7 @@ trait HasPersonAttributes
             ->get()
             ->keyBy('key');
         $extras = [];
+        $abacRoles = [];
         foreach ($attributes as $key => $value) {
             if ($value === null || $value === '') {
                 continue;
@@ -47,8 +48,11 @@ trait HasPersonAttributes
                 ['key' => $key],
                 ['value' => $value],
             );
+
             if ($definition->is_abac) {
-                Role::findOrCreate(sprintf('%s.%s', $key, $value));
+                $role = sprintf('%s.%s', $key, $value);
+                Role::findOrCreate($role, 'web');
+                $abacRoles[] = $role;
             }
         }
 
@@ -58,6 +62,27 @@ trait HasPersonAttributes
                 $extras
             );
             $this->save();
+        }
+
+        if ($abacRoles !== [] && method_exists($this, 'syncRoles')) {
+
+            $manualRoles = $this->roles
+                ->pluck('name')
+                ->reject(function ($roleName) use ($definitions): bool {
+                    foreach ($definitions as $definition) {
+                        if ($definition->is_abac && str_starts_with($roleName, $definition->key.'.')) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                })
+                ->values()
+                ->all();
+            $this->syncRoles([
+                ...$manualRoles,
+                ...array_unique($abacRoles),
+            ]);
         }
     }
 
