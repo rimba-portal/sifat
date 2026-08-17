@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rimba\Attributing\Http\UI\Admin\Resources\PersonAttributes\Tables;
 
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Tables\Grouping\Group;
 
 class PersonAttributesTable
 {
@@ -15,12 +15,12 @@ class PersonAttributesTable
     {
         return $table
             ->modifyQueryUsing(function (Builder $query) {
-                return $query->select(['key', 'value',])
+                return $query->select(['key', 'value'])
                     ->selectRaw('MIN(id) as id')
                     ->selectRaw('COUNT(*) as count')
                     ->groupBy('key', 'value');
             })
-            ->groups([Group::make('key')->collapsible(),])
+            ->groups([Group::make('key')->collapsible()])
             ->collapsedGroupsByDefault()
             ->defaultGroup('key')
             ->paginated(false)
