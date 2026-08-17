@@ -4,44 +4,37 @@ declare(strict_types=1);
 
 namespace Rimba\Attributing\Http\UI\Admin\Resources\PersonAttributes\Tables;
 
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Grouping\Group;
 
 class PersonAttributesTable
 {
     public static function configure(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(function (Builder $query) {
+                return $query->select(['key', 'value',])
+                    ->selectRaw('MIN(id) as id')
+                    ->selectRaw('COUNT(*) as count')
+                    ->groupBy('key', 'value');
+            })
+            ->groups([Group::make('key')->collapsible(),])
+            ->collapsedGroupsByDefault()
+            ->defaultGroup('key')
+            ->paginated(false)
             ->columns([
                 TextColumn::make('key')
-                    ->searchable(),
-                TextColumn::make('attributable_type')
-                    ->searchable(),
-                TextColumn::make('attributable_id')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('value')
+                    ->searchable()
+                    ->wrap()->sortable(),
+                TextColumn::make('count')
+                    ->label('Occurrences')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
-            ->filters([
-                //
-            ])
-            ->recordActions([
-                EditAction::make(),
-            ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
             ]);
     }
 }
