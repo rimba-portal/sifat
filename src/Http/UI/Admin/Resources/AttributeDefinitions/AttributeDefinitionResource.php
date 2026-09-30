@@ -1,69 +1,49 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions;
 
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-use Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions\Schemas\AttributeDefinitionForm;
-use Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions\Tables\AttributeDefinitionsTable;
-use Rimba\Attributing\Models\AttributeDefinition;
-use UnitEnum;
 
 class AttributeDefinitionResource extends Resource
 {
-    protected static ?string $model = AttributeDefinition::class;
-
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::ArrowSmallRight;
-
-    protected static ?string $recordTitleAttribute = 'name';
+    protected static ?string $model = \Rimba\Attributing\Models\AttributeDefinition::class;
 
     protected static string|UnitEnum|null $navigationGroup = 'Attributing';
 
-    protected static ?string $navigationLabel = 'Definitions';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-play';
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 19;
 
-    protected static ?string $title = 'Definitions';
+    protected static ?string $recordTitleAttribute = 'name';
 
-    protected ?string $subheading = 'Attribute definitions for resource attributes.';
+    public static function form(Schema $schema): Schema { return \Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions\Schemas\AttributeDefinitionForm::configure($schema); }
 
-    public static function shouldRegisterNavigation(): bool
-    {
-        return false;
-    }
+    public static function infolist(Schema $schema): Schema { return $schema->components([]); }
 
-    public static function form(Schema $schema): Schema
-    {
-        return AttributeDefinitionForm::configure($schema);
-    }
+    public static function table(Table $table): Table { return \Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions\Tables\AttributeDefinitionsTable::configure($table); }
 
-    public static function table(Table $table): Table
-    {
-        return AttributeDefinitionsTable::configure($table);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            RelationManagers\AttributeOptionsRelationManager::class,
+    public static function getRelations(): array 
+    { 
+        return [ 
+            // 
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'person' => Pages\ListPersonAttributeDefinitions::route('/person'),
-            'thing' => Pages\ListThingAttributeDefinitions::route('/thing'),
-            'location' => Pages\ListLocationAttributeDefinitions::route('/location'),
-
-            'index' => Pages\ListAttributeDefinitions::route('/'),
-            'create' => Pages\CreateAttributeDefinition::route('/create'),
-            'edit' => Pages\EditAttributeDefinition::route('/{record}/edit'),
+            'index' => \Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions\Pages\ListAttributeDefinitions::route('/'),
+             'create' => \Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions\Pages\CreateAttributeDefinition::route('/create'),
+            // 'view' => \Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions\Pages\ViewAttributeDefinition::route('/{record}'),
+             'edit' => \Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions\Pages\EditAttributeDefinition::route('/{record}/edit'),
+            'person' => \Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions\Pages\ListPersonAttributeDefinitions::route('/person'),
+'thing' => \Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions\Pages\ListThingAttributeDefinitions::route('/thing'),
+'location' => \Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions\Pages\ListLocationAttributeDefinitions::route('/location'),
         ];
     }
 }

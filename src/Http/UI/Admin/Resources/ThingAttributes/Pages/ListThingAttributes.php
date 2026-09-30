@@ -1,32 +1,22 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Rimba\Attributing\Http\UI\Admin\Resources\ThingAttributes\Pages;
 
-use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
-use Rimba\Attributing\Http\UI\Admin\Resources\ThingAttributes\ThingAttributeResource;
 
 class ListThingAttributes extends ListRecords
 {
-    protected static string $resource = ThingAttributeResource::class;
+    protected static string $resource = \Rimba\Attributing\Http\UI\Admin\Resources\ThingAttributes\ThingAttributeResource::class;
 
-    protected static ?string $title = 'Thing Attributes';
+    protected static ?string $title = 'Asset Properties';
 
-    protected ?string $subheading = 'Attribute for physical item resources.';
+    protected ?string $subheading = 'Listing of attibutes of things';
 
     protected function getHeaderActions(): array
     {
         return [
             CreateAction::make(),
-            Action::make('definition')
-                ->tooltip('Definitions for Thing Attributes')
-                ->iconButton()
-                ->icon('bites-design')
-                ->action(fn () => redirect()->route('filament.admin.resources.attribute-definitions.thing')),
-
         ];
     }
 }

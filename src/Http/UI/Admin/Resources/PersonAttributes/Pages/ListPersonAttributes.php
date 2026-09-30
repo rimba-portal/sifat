@@ -1,31 +1,22 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Rimba\Attributing\Http\UI\Admin\Resources\PersonAttributes\Pages;
 
-use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
-use Rimba\Attributing\Http\UI\Admin\Resources\PersonAttributes\PersonAttributeResource;
 
 class ListPersonAttributes extends ListRecords
 {
-    protected static string $resource = PersonAttributeResource::class;
+    protected static string $resource = \Rimba\Attributing\Http\UI\Admin\Resources\PersonAttributes\PersonAttributeResource::class;
 
-    protected static ?string $title = 'Person Attributes';
+    protected static ?string $title = 'Personnel Attributes';
 
-    protected ?string $subheading = 'Attribute for person resources.';
+    protected ?string $subheading = 'Listing of people attibutes';
 
     protected function getHeaderActions(): array
     {
         return [
             CreateAction::make(),
-            Action::make('definition')
-                ->tooltip('Definitions for Person Attributes')
-                ->iconButton()
-                ->icon('bites-design')
-                ->action(fn () => redirect()->route('filament.admin.resources.attribute-definitions.person')),
         ];
     }
 }

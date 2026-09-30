@@ -1,36 +1,22 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions\Pages;
 
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
-use Filament\Schemas\Components\Tabs\Tab;
-use Illuminate\Database\Eloquent\Builder;
-use Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions\AttributeDefinitionResource;
 
 class ListAttributeDefinitions extends ListRecords
 {
-    protected static string $resource = AttributeDefinitionResource::class;
+    protected static string $resource = \Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions\AttributeDefinitionResource::class;
+
+    protected static ?string $title = 'Custom Attribute Definitions';
+
+    protected ?string $subheading = 'Define shared configuration properties and structural asset traits.';
 
     protected function getHeaderActions(): array
     {
         return [
             CreateAction::make(),
-        ];
-    }
-
-    public function getTabs(): array
-    {
-        return [
-            'all' => Tab::make('All'),
-            'person' => Tab::make('Person')
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('family', 'person')),
-            'thing' => Tab::make('Thing')
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('family', 'thing')),
-            'location' => Tab::make('Location')
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('family', 'location')),
         ];
     }
 }
