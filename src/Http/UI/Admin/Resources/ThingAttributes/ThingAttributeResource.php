@@ -1,17 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Rimba\Attributing\Http\UI\Admin\Resources\ThingAttributes;
 
 use BackedEnum;
-use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Rimba\Attributing\Http\UI\Admin\Resources\ThingAttributes\Pages\CreateThingAttribute;
+use Rimba\Attributing\Http\UI\Admin\Resources\ThingAttributes\Pages\EditThingAttribute;
+use Rimba\Attributing\Http\UI\Admin\Resources\ThingAttributes\Pages\ListThingAttributes;
+use Rimba\Attributing\Http\UI\Admin\Resources\ThingAttributes\Schemas\ThingAttributeForm;
+use Rimba\Attributing\Http\UI\Admin\Resources\ThingAttributes\Tables\ThingAttributesTable;
+use Rimba\Attributing\Models\ThingAttribute;
+use UnitEnum;
 
 class ThingAttributeResource extends Resource
 {
-    protected static ?string $model = \Rimba\Attributing\Models\ThingAttribute::class;
+    protected static ?string $model = ThingAttribute::class;
 
     protected static string|UnitEnum|null $navigationGroup = 'Attributing';
 
@@ -21,26 +28,35 @@ class ThingAttributeResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'key';
 
-    public static function form(Schema $schema): Schema { return \Rimba\Attributing\Http\UI\Admin\Resources\ThingAttributes\Schemas\ThingAttributeForm::configure($schema); }
+    public static function form(Schema $schema): Schema
+    {
+        return ThingAttributeForm::configure($schema);
+    }
 
-    public static function infolist(Schema $schema): Schema { return $schema->components([]); }
+    public static function infolist(Schema $schema): Schema
+    {
+        return $schema->components([]);
+    }
 
-    public static function table(Table $table): Table { return \Rimba\Attributing\Http\UI\Admin\Resources\ThingAttributes\Tables\ThingAttributesTable::configure($table); }
+    public static function table(Table $table): Table
+    {
+        return ThingAttributesTable::configure($table);
+    }
 
-    public static function getRelations(): array 
-    { 
-        return [ 
-            // 
+    public static function getRelations(): array
+    {
+        return [
+            //
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => \Rimba\Attributing\Http\UI\Admin\Resources\ThingAttributes\Pages\ListThingAttributes::route('/'),
-             'create' => \Rimba\Attributing\Http\UI\Admin\Resources\ThingAttributes\Pages\CreateThingAttribute::route('/create'),
+            'index' => ListThingAttributes::route('/'),
+            'create' => CreateThingAttribute::route('/create'),
             // 'view' => \Rimba\Attributing\Http\UI\Admin\Resources\ThingAttributes\Pages\ViewThingAttribute::route('/{record}'),
-             'edit' => \Rimba\Attributing\Http\UI\Admin\Resources\ThingAttributes\Pages\EditThingAttribute::route('/{record}/edit'),
+            'edit' => EditThingAttribute::route('/{record}/edit'),
             //
         ];
     }

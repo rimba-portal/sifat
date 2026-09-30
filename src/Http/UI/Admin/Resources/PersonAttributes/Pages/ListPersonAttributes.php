@@ -1,13 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Rimba\Attributing\Http\UI\Admin\Resources\PersonAttributes\Pages;
 
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use Rimba\Attributing\Http\UI\Admin\Resources\PersonAttributes\PersonAttributeResource;
 
 class ListPersonAttributes extends ListRecords
 {
-    protected static string $resource = \Rimba\Attributing\Http\UI\Admin\Resources\PersonAttributes\PersonAttributeResource::class;
+    protected static string $resource = PersonAttributeResource::class;
 
     protected static ?string $title = 'Personnel Attributes';
 
