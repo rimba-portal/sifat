@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace Rimba\Attributing\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Rimba\Attributing\Observers\PersonAttributeObserver;
 
+#[ObservedBy(PersonAttributeObserver::class)]
 #[Fillable([
     'key',
     'value',
