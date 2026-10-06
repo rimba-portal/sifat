@@ -14,6 +14,7 @@ use Rimba\Attributing\Observers\PersonAttributeObserver;
 #[Fillable([
     'key',
     'value',
+    'is_abac',
     'attributable_id',
     'attributable_type',
 ])]

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 #[Fillable([
     'key',
     'value',
+    'is_abac',
     'attributable_id',
     'attributable_type',
 ])]

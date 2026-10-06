@@ -58,6 +58,7 @@ trait HasPersonAttributes
                 ],
                 [
                     'value' => $value,
+                    'is_abac' => $definition?->is_abac ?? false,
                 ],
             );
         }
@@ -90,7 +91,7 @@ trait HasPersonAttributes
         return json_encode(
             $value,
             JSON_UNESCAPED_UNICODE
-            | JSON_UNESCAPED_SLASHES
+                | JSON_UNESCAPED_SLASHES
         );
     }
 }

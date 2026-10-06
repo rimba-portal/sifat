@@ -52,6 +52,7 @@ return new class extends Migration
             $table->string('key'); // e.g. 'gender', 'dob', 'phone'
             $table->text('value')->nullable();
             $table->morphs('attributable'); // adds attributable_id and attributable_type
+            $table->boolean('is_abac')->default(false);
             $table->timestamps();
 
             $table->unique(['attributable_type', 'attributable_id', 'key']);
@@ -63,6 +64,7 @@ return new class extends Migration
             $table->string('key'); // e.g. 'dimensions', 'type', 'location'
             $table->text('value')->nullable();
             $table->morphs('attributable'); // adds adds attributable_id and attributable_type
+            $table->boolean('is_abac')->default(false);
             $table->timestamps();
 
             $table->index('key');
@@ -73,6 +75,7 @@ return new class extends Migration
             $table->string('key'); // e.g. 'dimensions', 'type', 'location'
             $table->text('value')->nullable();
             $table->morphs('attributable'); // adds adds attributable_id and attributable_type
+            $table->boolean('is_abac')->default(false);
             $table->timestamps();
 
             $table->index('key');

@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace Rimba\Attributing\Actions;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use Rimba\Attributing\Models\PersonAttribute;
 use Spatie\Permission\Models\Role;
 
 class EnsureAbacRoleExistsAction
 {
-    public function execute(PersonAttribute $attribute): void
+    public function execute(Model $attribute): void
     {
-        $definition = $attribute->definition;
+        $attributable = $attribute->attributable;
 
-        if (! $definition?->is_abac) {
+        if (! $attributable) {
             return;
         }
 
         $role = sprintf(
             '%s§%s§%s',
-            Str::snake(class_basename($attribute->attributable)),
+            Str::snake(class_basename($attributable)),
             $attribute->key,
             $attribute->value,
         );
