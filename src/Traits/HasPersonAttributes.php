@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace Rimba\Attributing\Traits;
 
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Str;
 use Rimba\Attributing\Models\AttributeDefinition;
 use Rimba\Attributing\Models\PersonAttribute;
+use Rimba\People\Models\Staff;
+use Rimba\Position\Models\JobPosition;
 use Spatie\Permission\Models\Role;
 
 trait HasPersonAttributes
@@ -14,6 +17,21 @@ trait HasPersonAttributes
     public function personAttributes(): MorphMany
     {
         return $this->morphMany(PersonAttribute::class, 'attributable');
+    }
+
+    protected function roleAssignable(): ?object
+    {
+        if (method_exists($this, 'syncRoles')) {
+            return $this;
+        }
+
+        if ($this instanceof JobPosition) {
+            return Staff::query()
+                ->whereHas('jobPosition', fn ($q) => $q->whereKey($this->getKey()))
+                ->first();
+        }
+
+        return null;
     }
 
     public static function seedMappings(): array
@@ -50,7 +68,8 @@ trait HasPersonAttributes
             );
 
             if ($definition->is_abac) {
-                $role = sprintf('%s.%s', $key, $value);
+                $model = Str::snake(class_basename($this));
+                $role = sprintf('%s§%s§%s', $model, $key, $value);
                 Role::findOrCreate($role, 'web');
                 $abacRoles[] = $role;
             }
@@ -64,7 +83,11 @@ trait HasPersonAttributes
             $this->save();
         }
 
-        if ($abacRoles !== [] && method_exists($this, 'syncRoles')) {
+        $roleTarget = $this->roleAssignable();
+
+        if ($abacRoles !== [] && $roleTarget) {
+
+            // if ($abacRoles !== [] && method_exists($this, 'syncRoles')) {
 
             $manualRoles = $this->roles
                 ->pluck('name')
