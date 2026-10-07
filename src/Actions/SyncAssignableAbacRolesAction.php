@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rimba\Attributing\Actions;
 
+use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Str;
-use Rimba\Attributing\Models\AttributeDefinition;
 use Rimba\People\Models\Staff;
 use Rimba\Position\Models\JobPosition;
 use Spatie\Permission\Models\Role;
@@ -14,28 +14,25 @@ class SyncAssignableAbacRolesAction
 {
     public function execute(object $model): void
     {
-        $assignable = $this->resolveAssignable($model);
-
-        if (! $assignable) {
+        if (! method_exists($model, 'personAttributes')) {
             return;
         }
 
-        $definitions = AttributeDefinition::query()
-            ->where('family', 'person')
+        $abacRoles = $model->personAttributes()
             ->where('is_abac', true)
             ->get()
-            ->keyBy('key');
-
-        $abacRoles = $model->personAttributes
-            ->filter(fn ($attribute): bool => isset($definitions[$attribute->key]))
-            ->map(function ($attribute) use ($model): string {
-                return sprintf(
+            ->filter(
+                fn ($attribute): bool => filled($attribute->key) &&
+                    filled($attribute->value)
+            )
+            ->map(
+                fn ($attribute): string => sprintf(
                     '%s§%s§%s',
                     Str::snake(class_basename($model)),
                     $attribute->key,
                     $attribute->value,
-                );
-            })
+                )
+            )
             ->unique()
             ->values()
             ->all();
@@ -44,35 +41,40 @@ class SyncAssignableAbacRolesAction
             Role::findOrCreate($role, 'web');
         }
 
-        $manualRoles = $assignable->roles
-            ->pluck('name')
-            ->reject(
-                fn (string $role): bool => str_contains($role, '§')
-            )
-            ->values()
-            ->all();
+        foreach ($this->resolveAssignables($model) as $assignable) {
+            $manualRoles = $assignable->roles()
+                ->pluck('name')
+                ->reject(
+                    fn (string $role): bool => str_contains($role, '§')
+                )
+                ->values()
+                ->all();
 
-        $assignable->syncRoles([
-            ...$manualRoles,
-            ...$abacRoles,
-        ]);
+            $assignable->syncRoles([
+                ...$manualRoles,
+                ...$abacRoles,
+            ]);
+        }
     }
 
-    protected function resolveAssignable(object $model): ?object
+    protected function resolveAssignables(object $model): SupportCollection
     {
-        if (method_exists($model, 'syncRoles')) {
-            return $model;
-        }
-
         if ($model instanceof JobPosition) {
             return Staff::query()
                 ->whereHas(
                     'jobPosition',
-                    fn ($q) => $q->whereKey($model->getKey())
+                    fn ($query) => $query->whereKey($model->getKey())
                 )
-                ->first();
+                ->get()
+                ->filter(
+                    fn (Staff $staff): bool => method_exists($staff, 'syncRoles')
+                );
         }
 
-        return null;
+        if (method_exists($model, 'syncRoles')) {
+            return collect([$model]);
+        }
+
+        return collect();
     }
 }
