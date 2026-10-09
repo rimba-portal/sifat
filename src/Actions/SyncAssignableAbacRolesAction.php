@@ -7,32 +7,15 @@ namespace Rimba\Attributing\Actions;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Str;
 use Rimba\People\Models\Staff;
-use Rimba\Position\Models\JobPosition;
 use Spatie\Permission\Models\Role;
 
-class SyncAssignableAbacRolesAction
+class SyncStaffAbacRolesAction
 {
-    public function execute(object $model): void
-    {
-        if (! method_exists($model, 'personAttributes')) {
-            return;
-        }
+    protected string $delimiter = '◇'; //  '◇' used for ABAC whereas '◆' used for RBAC
 
-        $abacRoles = $model->personAttributes()
-            ->where('is_abac', true)
-            ->get()
-            ->filter(
-                fn ($attribute): bool => filled($attribute->key) &&
-                    filled($attribute->value)
-            )
-            ->map(
-                fn ($attribute): string => sprintf(
-                    '%s§%s§%s',
-                    Str::snake(class_basename($model)),
-                    $attribute->key,
-                    $attribute->value,
-                )
-            )
+    public function execute(Staff $staff): void
+    {
+        $abacRoles = $this->resolveAbacRoles($staff)
             ->unique()
             ->values()
             ->all();
@@ -41,40 +24,67 @@ class SyncAssignableAbacRolesAction
             Role::findOrCreate($role, 'web');
         }
 
-        foreach ($this->resolveAssignables($model) as $assignable) {
-            $manualRoles = $assignable->roles()
-                ->pluck('name')
-                ->reject(
-                    fn (string $role): bool => str_contains($role, '§')
-                )
-                ->values()
-                ->all();
+        $manualRoles = $staff->roles()
+            ->pluck('name')
+            ->reject(
+                fn (string $role): bool => str_contains($role, $this->delimiter)
+            )
+            ->values()
+            ->all();
 
-            $assignable->syncRoles([
-                ...$manualRoles,
-                ...$abacRoles,
-            ]);
-        }
+        $staff->syncRoles([
+            ...$manualRoles,
+            ...$abacRoles,
+        ]);
     }
 
-    protected function resolveAssignables(object $model): SupportCollection
+    protected function resolveAbacRoles(Staff $staff): SupportCollection
     {
-        if ($model instanceof JobPosition) {
-            return Staff::query()
-                ->whereHas(
-                    'jobPosition',
-                    fn ($query) => $query->whereKey($model->getKey())
+        $roles = collect();
+
+        if ($staff->user) {
+            $roles = $roles->concat(
+                $this->attributesToRoles($staff->user)
+            );
+        }
+
+        $roles = $roles->concat(
+            $this->attributesToRoles($staff)
+        );
+
+        if ($staff->jobPosition) {
+            return $roles->concat(
+                $this->attributesToRoles($staff->jobPosition)
+            );
+        }
+
+        return $roles;
+    }
+
+    protected function attributesToRoles(object $model): SupportCollection
+    {
+        if (! method_exists($model, 'personAttributes')) {
+            return collect();
+        }
+
+        $prefix = Str::snake(class_basename($model));
+
+        return $model->personAttributes()
+            ->where('is_abac', true)
+            ->get()
+            ->filter(
+                fn ($attribute): bool => filled($attribute->key) &&
+                    filled($attribute->value)
+            )
+            ->map(
+                fn ($attribute): string => implode(
+                    $this->delimiter,
+                    [
+                        $prefix,
+                        $attribute->key,
+                        $attribute->value,
+                    ]
                 )
-                ->get()
-                ->filter(
-                    fn (Staff $staff): bool => method_exists($staff, 'syncRoles')
-                );
-        }
-
-        if (method_exists($model, 'syncRoles')) {
-            return collect([$model]);
-        }
-
-        return collect();
+            );
     }
 }
