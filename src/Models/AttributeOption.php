@@ -21,11 +21,15 @@ class AttributeOption extends Model
     {
         return [
             'is_active' => 'boolean',
+            'sort_order' => 'integer',
         ];
     }
 
     public function definition(): BelongsTo
     {
-        return $this->belongsTo(AttributeDefinition::class, 'attribute_definition_id');
+        return $this->belongsTo(
+            AttributeDefinition::class,
+            'attribute_definition_id',
+        );
     }
 }

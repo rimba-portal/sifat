@@ -4,21 +4,18 @@ declare(strict_types=1);
 
 namespace Rimba\Attributing\Actions;
 
-use Illuminate\Support\Collection as SupportCollection;
-use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
+use Rimba\Attributing\Support\AttributeRoleName;
 use Rimba\People\Models\Staff;
 use Spatie\Permission\Models\Role;
 
-class SyncStaffAbacRolesAction
+final class SyncStaffAbacRolesAction
 {
-    protected string $delimiter = '◇'; //  '◇' used for ABAC whereas '◆' used for RBAC
-
     public function execute(Staff $staff): void
     {
         $abacRoles = $this->resolveAbacRoles($staff)
             ->unique()
-            ->values()
-            ->all();
+            ->values();
 
         foreach ($abacRoles as $role) {
             Role::findOrCreate($role, 'web');
@@ -27,64 +24,58 @@ class SyncStaffAbacRolesAction
         $manualRoles = $staff->roles()
             ->pluck('name')
             ->reject(
-                fn (string $role): bool => str_contains($role, $this->delimiter)
+                fn (string $role): bool => AttributeRoleName::isGenerated($role),
             )
-            ->values()
-            ->all();
+            ->values();
 
         $staff->syncRoles([
-            ...$manualRoles,
-            ...$abacRoles,
+            ...$manualRoles->all(),
+            ...$abacRoles->all(),
         ]);
     }
 
-    protected function resolveAbacRoles(Staff $staff): SupportCollection
+    private function resolveAbacRoles(Staff $staff): Collection
     {
         $roles = collect();
 
         if ($staff->user) {
             $roles = $roles->concat(
-                $this->attributesToRoles($staff->user)
+                $this->attributesToRoles($staff->user),
             );
         }
 
         $roles = $roles->concat(
-            $this->attributesToRoles($staff)
+            $this->attributesToRoles($staff),
         );
 
         if ($staff->jobPosition) {
             return $roles->concat(
-                $this->attributesToRoles($staff->jobPosition)
+                $this->attributesToRoles($staff->jobPosition),
             );
         }
 
         return $roles;
     }
 
-    protected function attributesToRoles(object $model): SupportCollection
+    private function attributesToRoles(object $model): Collection
     {
         if (! method_exists($model, 'personAttributes')) {
             return collect();
         }
 
-        $prefix = Str::snake(class_basename($model));
-
         return $model->personAttributes()
             ->where('is_abac', true)
             ->get()
             ->filter(
-                fn ($attribute): bool => filled($attribute->key) &&
-                    filled($attribute->value)
+                fn ($attribute): bool => filled($attribute->key)
+                    && filled($attribute->value),
             )
             ->map(
-                fn ($attribute): string => implode(
-                    $this->delimiter,
-                    [
-                        $prefix,
-                        $attribute->key,
-                        $attribute->value,
-                    ]
-                )
+                fn ($attribute): string => AttributeRoleName::make(
+                    model: $model,
+                    key: (string) $attribute->key,
+                    value: (string) $attribute->value,
+                ),
             );
     }
 }

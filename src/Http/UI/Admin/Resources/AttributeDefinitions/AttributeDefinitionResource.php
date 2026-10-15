@@ -14,6 +14,7 @@ use Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions\Pages\ListAtt
 use Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions\Pages\ListLocationAttributeDefinitions;
 use Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions\Pages\ListPersonAttributeDefinitions;
 use Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions\Pages\ListThingAttributeDefinitions;
+use Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions\RelationManagers\AttributeOptionsRelationManager;
 use Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions\Schemas\AttributeDefinitionForm;
 use Rimba\Attributing\Http\UI\Admin\Resources\AttributeDefinitions\Tables\AttributeDefinitionsTable;
 use Rimba\Attributing\Models\AttributeDefinition;
@@ -49,7 +50,7 @@ class AttributeDefinitionResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            AttributeOptionsRelationManager::class,
         ];
     }
 

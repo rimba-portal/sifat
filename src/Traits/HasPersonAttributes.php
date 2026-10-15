@@ -14,7 +14,7 @@ trait HasPersonAttributes
     {
         return $this->morphMany(
             PersonAttribute::class,
-            'attributable'
+            'attributable',
         );
     }
 
@@ -29,22 +29,19 @@ trait HasPersonAttributes
     {
         $definitions = AttributeDefinition::query()
             ->where('family', 'person')
+            ->where('is_active', true)
             ->get()
             ->keyBy('key');
 
         $extras = [];
 
         foreach ($attributes as $key => $value) {
-
             if ($value === null || $value === '') {
                 continue;
             }
 
-            $value = $this->normalizePersonAttributeValue(
-                $value
-            );
-
-            $definition = $definitions[$key] ?? null;
+            $value = $this->normalizePersonAttributeValue($value);
+            $definition = $definitions->get($key);
 
             if (! $definition) {
                 $extras[$key] = $value;
@@ -53,12 +50,10 @@ trait HasPersonAttributes
             }
 
             $this->personAttributes()->updateOrCreate(
-                [
-                    'key' => $key,
-                ],
+                ['key' => $key],
                 [
                     'value' => $value,
-                    'is_abac' => $definition?->is_abac ?? false,
+                    'is_abac' => $definition->is_abac,
                 ],
             );
         }
@@ -66,16 +61,15 @@ trait HasPersonAttributes
         if ($extras !== []) {
             $this->attributes = array_merge(
                 $this->attributes ?? [],
-                $extras
+                $extras,
             );
 
             $this->save();
         }
     }
 
-    protected function normalizePersonAttributeValue(
-        mixed $value
-    ): ?string {
+    protected function normalizePersonAttributeValue(mixed $value): ?string
+    {
         if ($value === null) {
             return null;
         }
@@ -90,8 +84,7 @@ trait HasPersonAttributes
 
         return json_encode(
             $value,
-            JSON_UNESCAPED_UNICODE
-                | JSON_UNESCAPED_SLASHES
-        );
+            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES,
+        ) ?: null;
     }
 }

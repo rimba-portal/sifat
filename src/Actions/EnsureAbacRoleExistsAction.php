@@ -5,26 +5,30 @@ declare(strict_types=1);
 namespace Rimba\Attributing\Actions;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
+use Rimba\Attributing\Support\AttributeRoleName;
 use Spatie\Permission\Models\Role;
 
-class EnsureAbacRoleExistsAction
+final class EnsureAbacRoleExistsAction
 {
     public function execute(Model $attribute): void
     {
         $attributable = $attribute->attributable;
 
-        if (! $attributable) {
+        if (! $attributable || ! $attribute->is_abac) {
             return;
         }
 
-        $role = sprintf(
-            '%s§%s§%s',
-            Str::snake(class_basename($attributable)),
-            $attribute->key,
-            $attribute->value,
-        );
+        if (blank($attribute->key) || blank($attribute->value)) {
+            return;
+        }
 
-        Role::findOrCreate($role, 'web');
+        Role::findOrCreate(
+            AttributeRoleName::make(
+                model: $attributable,
+                key: (string) $attribute->key,
+                value: (string) $attribute->value,
+            ),
+            'web',
+        );
     }
 }

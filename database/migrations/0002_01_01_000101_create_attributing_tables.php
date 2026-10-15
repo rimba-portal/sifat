@@ -55,7 +55,7 @@ return new class extends Migration
             $table->boolean('is_abac')->default(false);
             $table->timestamps();
 
-            $table->unique(['attributable_type', 'attributable_id', 'key']);
+            $table->unique(['attributable_type', 'attributable_id', 'key'], 'person_attributes_owner_key_unique');
             $table->index('key');
         });
         // for consumption of assets, equipment, (actual,defined)
@@ -67,6 +67,7 @@ return new class extends Migration
             $table->boolean('is_abac')->default(false);
             $table->timestamps();
 
+            $table->unique(['attributable_type', 'attributable_id', 'key'], 'location_attributes_owner_key_unique');
             $table->index('key');
         });
         // for consumption of assets, equipment, (actual,defined)
@@ -78,6 +79,7 @@ return new class extends Migration
             $table->boolean('is_abac')->default(false);
             $table->timestamps();
 
+            $table->unique(['attributable_type', 'attributable_id', 'key'], 'thing_attributes_owner_key_unique');
             $table->index('key');
         });
 

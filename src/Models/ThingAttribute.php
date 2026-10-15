@@ -7,6 +7,7 @@ namespace Rimba\Attributing\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 #[Fillable([
     'key',
@@ -19,7 +20,14 @@ class ThingAttribute extends Model
 {
     use HasFactory;
 
-    public function attributable()
+    protected function casts(): array
+    {
+        return [
+            'is_abac' => 'boolean',
+        ];
+    }
+
+    public function attributable(): MorphTo
     {
         return $this->morphTo();
     }

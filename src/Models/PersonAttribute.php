@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Rimba\Attributing\Observers\PersonAttributeObserver;
 
 #[ObservedBy(PersonAttributeObserver::class)]
@@ -22,15 +23,15 @@ class PersonAttribute extends Model
 {
     use HasFactory;
 
-    public function attributable()
-    {
-        return $this->morphTo();
-    }
-
     protected function casts(): array
     {
         return [
-            // 'value' => 'encrypted',
+            'is_abac' => 'boolean',
         ];
+    }
+
+    public function attributable(): MorphTo
+    {
+        return $this->morphTo();
     }
 }

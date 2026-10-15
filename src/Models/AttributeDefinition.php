@@ -31,12 +31,16 @@ class AttributeDefinition extends Model
             'applies_to' => 'array',
             'has_options' => 'boolean',
             'is_active' => 'boolean',
+            'is_abac' => 'boolean',
             'is_system' => 'boolean',
+            'sort_order' => 'integer',
         ];
     }
 
     public function options(): HasMany
     {
-        return $this->hasMany(AttributeOption::class);
+        return $this->hasMany(AttributeOption::class)
+            ->orderBy('sort_order')
+            ->orderBy('label');
     }
 }

@@ -9,13 +9,11 @@ use Rimba\Attributing\Models\LocationAttribute;
 
 trait HasLocationAttributes
 {
-    /**
-     * @property Collection $LocationAttributes
-     *
-     * @method \Illuminate\Database\Eloquent\Relations\MorphMany LocationAttributes()
-     */
-    public function LocationAttributes(): MorphMany
+    public function locationAttributes(): MorphMany
     {
-        return $this->morphMany(LocationAttribute::class, 'attributable');
+        return $this->morphMany(
+            LocationAttribute::class,
+            'attributable',
+        );
     }
 }

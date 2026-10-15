@@ -11,7 +11,6 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
-use Rimba\Attributing\Models\AttributeDefinition;
 
 class AttributeDefinitionsTable
 {
@@ -50,9 +49,11 @@ class AttributeDefinitionsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->groups([
-                Group::make('segment')
-                    ->getTitleFromRecordUsing(fn (AttributeDefinition $record): string => sprintf('%s - %s', $record->family, $record->group)),
-            ])->defaultGroup('Segment')
+                Group::make('family'),
+                Group::make('group'),
+            ])
+            ->defaultGroup('family')
+
             ->filters([
                 //
             ])

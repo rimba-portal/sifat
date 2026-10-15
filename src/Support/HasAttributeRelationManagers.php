@@ -13,13 +13,9 @@ use Rimba\Attributing\Traits\HasThingAttributes;
 
 final class HasAttributeRelationManagers
 {
-    /**
-     * @return array<class-string>
-     */
     public static function forModel(string $modelClass): array
     {
         $traits = class_uses_recursive($modelClass);
-
         $relations = [];
 
         if (in_array(HasPersonAttributes::class, $traits, true)) {
