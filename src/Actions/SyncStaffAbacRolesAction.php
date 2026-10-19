@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Rimba\Attributing\Services\PersonAttributeDefinitionResolver;
 use Rimba\Attributing\Support\AttributeRoleName;
+use Rimba\Attributing\Support\AttributeSubject;
 use Rimba\People\Models\Staff;
 use Spatie\Permission\Models\Role;
 
@@ -27,6 +28,11 @@ final readonly class SyncStaffAbacRolesAction
             Role::findOrCreate($roleName, 'web');
         }
 
+        /*
+         * Preserve manually assigned roles.
+         *
+         * Only generated attribute roles are recalculated.
+         */
         $manualRoles = $staff->roles()
             ->pluck('name')
             ->reject(
@@ -44,16 +50,25 @@ final readonly class SyncStaffAbacRolesAction
     {
         $roles = collect();
 
+        /*
+         * User attributes.
+         */
         if ($staff->user) {
             $roles = $roles->concat(
                 $this->rolesFor($staff->user),
             );
         }
 
+        /*
+         * Staff attributes.
+         */
         $roles = $roles->concat(
             $this->rolesFor($staff),
         );
 
+        /*
+         * JobPosition attributes.
+         */
         if ($staff->jobPosition) {
             return $roles->concat(
                 $this->rolesFor($staff->jobPosition),
@@ -69,15 +84,32 @@ final readonly class SyncStaffAbacRolesAction
             return collect();
         }
 
+        $subject = AttributeSubject::for($model);
+
         return $model->personAttributes()
             ->get()
-            ->filter(
-                fn ($attribute): bool => filled($attribute->key)
-                    && filled($attribute->value)
-                    && (bool) $this->personAttributeDefinitionResolver
-                        ->resolve((string) $attribute->key)
-                        ?->is_abac,
-            )
+            ->filter(function ($attribute) use ($subject): bool {
+                if (
+                    blank($attribute->key)
+                    || blank($attribute->value)
+                ) {
+                    return false;
+                }
+
+                $definition = $this
+                    ->personAttributeDefinitionResolver
+                    ->resolve((string) $attribute->key);
+
+                if (! $definition?->is_abac) {
+                    return false;
+                }
+
+                return in_array(
+                    $subject,
+                    $definition->applies_to ?? [],
+                    true,
+                );
+            })
             ->map(
                 fn ($attribute): string => AttributeRoleName::make(
                     model: $model,
