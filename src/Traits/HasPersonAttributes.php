@@ -7,6 +7,7 @@ namespace Rimba\Attributing\Traits;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Rimba\Attributing\Models\AttributeDefinition;
 use Rimba\Attributing\Models\PersonAttribute;
+use Rimba\Attributing\Support\AttributeSubject;
 
 trait HasPersonAttributes
 {
@@ -18,53 +19,43 @@ trait HasPersonAttributes
         );
     }
 
-    public static function seedMappings(): array
-    {
-        return [
-            'attributes' => 'syncPersonAttributes',
-        ];
-    }
-
     public function syncPersonAttributes(array $attributes): void
     {
+        $subject = AttributeSubject::for($this);
+
         $definitions = AttributeDefinition::query()
             ->where('family', 'person')
             ->where('is_active', true)
             ->get()
             ->keyBy('key');
 
-        $extras = [];
-
         foreach ($attributes as $key => $value) {
             if ($value === null || $value === '') {
                 continue;
             }
 
-            $value = $this->normalizePersonAttributeValue($value);
             $definition = $definitions->get($key);
 
             if (! $definition) {
-                $extras[$key] = $value;
+                continue;
+            }
 
+            // Definition must apply to this model.
+            if (! in_array(
+                $subject,
+                $definition->applies_to ?? [],
+                true,
+            )) {
                 continue;
             }
 
             $this->personAttributes()->updateOrCreate(
                 ['key' => $key],
                 [
-                    'value' => $value,
-                    'is_abac' => $definition->is_abac,
+                    'value' => $this->normalizePersonAttributeValue($value),
+                    'is_abac' => (bool) $definition->is_abac,
                 ],
             );
-        }
-
-        if ($extras !== []) {
-            $this->attributes = array_merge(
-                $this->attributes ?? [],
-                $extras,
-            );
-
-            $this->save();
         }
     }
 

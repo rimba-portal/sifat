@@ -4,27 +4,49 @@ declare(strict_types=1);
 
 namespace Rimba\Attributing\Actions;
 
-use Illuminate\Database\Eloquent\Model;
+use Rimba\Attributing\Models\PersonAttribute;
+use Rimba\Attributing\Services\PersonAttributeDefinitionResolver;
 use Rimba\Attributing\Support\AttributeRoleName;
+use Rimba\Attributing\Support\AttributeSubject;
 use Spatie\Permission\Models\Role;
 
-final class EnsureAbacRoleExistsAction
+final readonly class EnsureAbacRoleExistsAction
 {
-    public function execute(Model $attribute): void
-    {
-        $attributable = $attribute->attributable;
+    public function __construct(
+        private PersonAttributeDefinitionResolver $personAttributeDefinitionResolver,
+    ) {}
 
-        if (! $attributable || ! $attribute->is_abac) {
-            return;
+    public function execute(PersonAttribute $attribute): ?Role
+    {
+        $owner = $attribute->attributable;
+
+        if (! $owner) {
+            return null;
         }
 
         if (blank($attribute->key) || blank($attribute->value)) {
-            return;
+            return null;
         }
 
-        Role::findOrCreate(
+        $definition = $this->personAttributeDefinitionResolver->resolve(
+            (string) $attribute->key,
+        );
+
+        if (! $definition?->is_abac) {
+            return null;
+        }
+
+        if (! in_array(
+            AttributeSubject::for($owner),
+            $definition->applies_to ?? [],
+            true,
+        )) {
+            return null;
+        }
+
+        return Role::findOrCreate(
             AttributeRoleName::make(
-                model: $attributable,
+                model: $owner,
                 key: (string) $attribute->key,
                 value: (string) $attribute->value,
             ),

@@ -14,10 +14,10 @@ return [
         'person' => [
             'identity' => 'Identity',
             'organization' => 'Organization',
-            'skills' => 'Skills',
-            'qualification' => 'Qualification',
-            'security' => 'Security',
+            'capability' => 'Capability',
+            'authorization' => 'Authorization',
             'requirements' => 'Requirements',
+            'security' => 'Security',
             'health' => 'Health',
         ],
         'thing' => [
